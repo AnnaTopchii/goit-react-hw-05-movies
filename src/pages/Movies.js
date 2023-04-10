@@ -5,13 +5,13 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { searchMovies } from 'services/api';
 import { MoviesList } from 'components/MoviesList';
-// import {
-//   Header,
-//   SearchForm,
-//   Button,
-//   ButtonLabel,
-//   Input,
-// } from './Searchbar.styled';
+import {
+  Container,
+  SearchForm,
+  Button,
+  ButtonLabel,
+  Input,
+} from './Movies.styled';
 
 const MoviesSearch = () => {
   const [movies, setMovies] = useState([]);
@@ -54,25 +54,25 @@ const MoviesSearch = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input
+    <Container>
+      <SearchForm onSubmit={handleSubmit}>
+        <Input
           type="text"
           name="movie"
           autoComplete="off"
           autoFocus
           placeholder="Search movies"
         />
-        <button type="submit">
-          <label>Search</label>
-        </button>
-      </form>
+        <Button type="submit">
+          <ButtonLabel>Search</ButtonLabel>
+        </Button>
+      </SearchForm>
 
       {isLoading && <div>LOADING ...</div>}
 
       {movies.length > 0 && <MoviesList movies={movies} location={location} />}
       <ToastContainer />
-    </>
+    </Container>
   );
 };
 

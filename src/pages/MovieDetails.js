@@ -2,6 +2,7 @@ import { Suspense, useRef, useEffect, useState } from 'react';
 import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
 import { getMovieDetails } from 'services/api';
 import { MovieCard } from 'components/MovieCard';
+import { Container, StyledBackLink } from './MovieDetails.styled';
 
 const MovieDetails = () => {
   const location = useLocation();
@@ -23,8 +24,8 @@ const MovieDetails = () => {
   }, [movieId]);
 
   return (
-    <>
-      <Link to={backLinkLocationRef.current}>Назад к странице коллекции</Link>
+    <Container>
+      <StyledBackLink to={backLinkLocationRef.current}> Back </StyledBackLink>
 
       {isLoading && <div>LOADING ...</div>}
 
@@ -42,7 +43,7 @@ const MovieDetails = () => {
       <Suspense fallback={<div>LOADING...</div>}>
         <Outlet />
       </Suspense>
-    </>
+    </Container>
   );
 };
 

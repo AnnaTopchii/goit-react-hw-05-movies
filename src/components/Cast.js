@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getMovieCredits } from 'services/api';
+import { Container, ActorsList, ActorsCard } from './Cast.slyled';
 
 const Cast = () => {
   const [castInfo, setCastInfo] = useState([]);
@@ -17,11 +18,11 @@ const Cast = () => {
   }, [movieId]);
 
   return (
-    <>
+    <Container>
       {castInfo.length > 0 && (
-        <ul>
+        <ActorsList>
           {castInfo.map(({ id, name, profile_path, character }) => (
-            <li key={id}>
+            <ActorsCard key={id}>
               <img
                 src={
                   profile_path
@@ -33,15 +34,13 @@ const Cast = () => {
                 loading="lazy"
                 alt="poster"
               />
-              <div>
-                <b> {name} </b>
-                <p>Character : {character}</p>
-              </div>
-            </li>
+              <b> {name} </b>
+              <p>Character : {character}</p>
+            </ActorsCard>
           ))}
-        </ul>
+        </ActorsList>
       )}
-    </>
+    </Container>
   );
 };
 
