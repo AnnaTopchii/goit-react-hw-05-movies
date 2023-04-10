@@ -2,14 +2,13 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getMovieCredits } from 'services/api';
 
-export const Cast = () => {
-  const [castInfo, setCastInfo] = useState({});
+const Cast = () => {
+  const [castInfo, setCastInfo] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
     getMovieCredits(movieId)
       .then(response => {
-        console.log(response);
         setCastInfo(response.cast);
       })
       .catch(error => {
@@ -17,11 +16,9 @@ export const Cast = () => {
       });
   }, [movieId]);
 
-  console.log(castInfo);
-
   return (
     <>
-      {castInfo && (
+      {castInfo.length > 0 && (
         <ul>
           {castInfo.map(({ id, name, profile_path, character }) => (
             <li key={id}>
@@ -47,3 +44,5 @@ export const Cast = () => {
     </>
   );
 };
+
+export default Cast;

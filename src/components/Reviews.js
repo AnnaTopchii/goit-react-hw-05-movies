@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getReviews } from 'services/api';
 
-export const Revievs = () => {
-  const [reviews, setReviews] = useState({});
+const Reviews = () => {
+  const [reviews, setReviews] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
@@ -16,20 +16,18 @@ export const Revievs = () => {
       });
   }, [movieId]);
 
-  console.log(reviews);
-
-  return (
-    <>
-      {reviews && (
-        <ul>
-          {reviews.map(({ id, author, content }) => (
-            <li key={id}>
-              <b> Author: {author} </b>
-              <p> {content}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
+  return reviews.length > 0 ? (
+    <ul>
+      {reviews.map(({ id, author, content }) => (
+        <li key={id}>
+          <b> Author: {author} </b>
+          <p> {content}</p>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>Sorry, there are no reviews</p>
   );
 };
+
+export default Reviews;

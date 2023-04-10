@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { getTrending } from 'services/api';
+import { MoviesList } from 'components/MoviesList';
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -12,29 +13,21 @@ const Home = () => {
     getTrending()
       .then(response => {
         setMovies(response.results);
-        setIsLoading(false);
       })
       .catch(error => {
         console.log(error);
       })
-      .finally();
+      .finally(setIsLoading(false));
   }, []);
 
   return (
     <>
+      {isLoading && <div>LOADING ...</div>}
+
       {movies.length > 0 && (
         <>
-          {isLoading && <div>LOADING ...</div>}
           <h1>Trending today</h1>
-          <ul>
-            {movies.map(({ id, title }) => (
-              <li key={id}>
-                <Link to={`/movies/${id}`} state={{ from: location }}>
-                  {title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <MoviesList movies={movies} location={location} />
         </>
       )}
     </>

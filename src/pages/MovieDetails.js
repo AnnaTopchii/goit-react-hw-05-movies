@@ -1,60 +1,35 @@
 import { Suspense, useRef, useEffect, useState } from 'react';
 import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
 import { getMovieDetails } from 'services/api';
+import { MovieCard } from 'components/MovieCard';
 
 const MovieDetails = () => {
   const location = useLocation();
   const backLinkLocationRef = useRef(location.state?.from ?? '/Home');
-  const [movieInfo, setMovieInfo] = useState({});
+  const [movieInfo, setMovieInfo] = useState(null);
   const { movieId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getMovieDetails(movieId)
       .then(response => {
         setMovieInfo(response);
       })
       .catch(error => {
         console.log(error);
-      });
+      })
+      .finally(setIsLoading(false));
   }, [movieId]);
-
-  const { title, release_date, overview, genres, poster_path, vote_average } =
-    movieInfo;
-
-  const releaseYear = () => {
-    const date = new Date(release_date);
-    return date.getFullYear();
-  };
-  const rate = Math.round(vote_average * 10);
-  //   const genresList = () => genres.map(genre => genre.name).join(', ');
 
   return (
     <>
       <Link to={backLinkLocationRef.current}>Назад к странице коллекции</Link>
 
-      <h1>
-        {title} ({releaseYear()})
-      </h1>
-      <div>
-        <img
-          src={
-            poster_path
-              ? `https://image.tmdb.org/t/p/w300${poster_path}`
-              : 'https://img.freepik.com/free-vector/images-concept-illustration_114360-218.jpg'
-          }
-          width={300}
-          height={400}
-          loading="lazy"
-          alt="poster"
-        />
-        <div>
-          <p>User score: {rate}%</p>
-          <h2>Overview</h2>
-          <p>{overview}</p>
-          <h3>Genres</h3>
-          {/* <p>{genresList()}</p> */}
-        </div>
-      </div>
+      {isLoading && <div>LOADING ...</div>}
+
+      {movieInfo && <MovieCard movieInfo={movieInfo} />}
+
       <p>Additional information</p>
       <ul>
         <li>
@@ -64,7 +39,7 @@ const MovieDetails = () => {
           <Link to="reviews">Reviews</Link>
         </li>
       </ul>
-      <Suspense fallback={<div>LOADING SUBPAGE...</div>}>
+      <Suspense fallback={<div>LOADING...</div>}>
         <Outlet />
       </Suspense>
     </>
