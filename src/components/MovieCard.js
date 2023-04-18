@@ -1,5 +1,6 @@
 import propTypes from 'prop-types';
 import { CardContainer } from './MovieCard.styled';
+import { getPosterPath } from 'services/getPosterPath';
 
 export const MovieCard = ({ movieInfo }) => {
   const { title, release_date, overview, genres, poster_path, vote_average } =
@@ -15,11 +16,7 @@ export const MovieCard = ({ movieInfo }) => {
   return (
     <CardContainer>
       <img
-        src={
-          poster_path
-            ? `https://image.tmdb.org/t/p/w300${poster_path}`
-            : 'https://img.freepik.com/free-vector/images-concept-illustration_114360-218.jpg'
-        }
+        src={getPosterPath(poster_path)}
         width={300}
         height={400}
         loading="lazy"
